@@ -38,7 +38,7 @@ def main():
     parser.add_argument("-F", "--format", choices=["ycm", "cc"], default="ycm", help="Format of output file (YouCompleteMe or color_coded). Default: ycm")
     parser.add_argument("-M", "--make-flags", help="Flags to pass to make when fake-building. Default: -M=\"{}\"".format(" ".join(default_make_flags)))
     parser.add_argument("-o", "--output", help="Save the config file as OUTPUT. Default: .ycm_extra_conf.py, or .color_coded if --format=cc.")
-    parser.add_argument("-x", "--language", choices=["c", "c++"], help="Only output flags for the given language. This defaults to whichever language has its compiler invoked the most.")
+    parser.add_argument("-x", "--language", choices=["c", "c++", "objc"], help="Only output flags for the given language. This defaults to whichever language has its compiler invoked the most.")
     parser.add_argument("--out-of-tree", action="store_true", help="Build autotools projects out-of-tree. This is a no-op for other project types.")
     parser.add_argument("--qt-version", choices=["4", "5"], default="5", help="Use the given Qt version for qmake. (Default: 5)")
     parser.add_argument("-e", "--preserve-environment", action="store_true", help="Pass environment variables to build processes.")
@@ -117,6 +117,9 @@ def main():
                 cxx_count = 0
             elif(force_lang == "c++"):
                 c_count = 0
+            elif(force_lang == "objc"):
+                cxx_count = 0
+                pass
 
             if(c_count == 0 and cxx_count == 0):
                 print("")
@@ -132,7 +135,10 @@ def main():
                 return 3
 
             elif(c_count > cxx_count):
-                lang, flags = ("c", c_flags)
+                if (force_lang == "objc"):
+                    lang, flags = ("objective-c", c_flags)
+                else:
+                    lang, flags = ("c", c_flags)
             else:
                 lang, flags = ("c++", cxx_flags)
 
