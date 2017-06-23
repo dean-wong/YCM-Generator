@@ -423,7 +423,7 @@ def parse_flags(build_log):
 
         flags.add("-D{}={}".format(name, values[0]))
 
-    return (line_count, skip_count, sorted(flags))
+    return (line_count, skip_count, list(flags))
 
 
 def generate_cc_conf(flags, config_file):
