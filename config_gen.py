@@ -13,6 +13,7 @@ import tempfile
 import time
 import subprocess
 import glob
+from operator import itemgetter
 
 
 # Default flags for make
@@ -423,7 +424,7 @@ def parse_flags(build_log):
 
         flags.add("-D{}={}".format(name, values[0]))
 
-    return (line_count, skip_count, list(flags))
+    return (line_count, skip_count, sorted(flags, key=itemgetter(0)))
 
 
 def generate_cc_conf(flags, config_file):
